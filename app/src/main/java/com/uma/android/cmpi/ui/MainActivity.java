@@ -1,4 +1,4 @@
-package com.uma.android.cmpi;
+package com.uma.android.cmpi.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.uma.android.cmpi.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,4 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
