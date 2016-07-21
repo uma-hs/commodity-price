@@ -1,5 +1,8 @@
 package com.uma.android.cmpi.api;
 
+import com.uma.android.cmpi.util.RestUtil;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,6 +12,16 @@ public class CMPAPIFilter {
     private List<String> states;
     private List<String> districts;
     private List<String> sortFields;
+
+    public CMPAPIFilter(){
+
+    }
+    public CMPAPIFilter(String state){
+        this.states=new ArrayList<>();
+        this.sortFields=new ArrayList<>();
+        this.states.add(state);
+        this.sortFields.add(RestUtil.DISTRICT);
+    }
 
     public List<String> getStates() {
         return states;

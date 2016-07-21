@@ -1,59 +1,66 @@
 package com.uma.android.cmpi.ui;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.uma.android.cmpi.R;
+import com.uma.android.cmpi.api.CMPAPIFilter;
+import com.uma.android.cmpi.api.SearchListener;
+import com.uma.android.cmpi.api.SearchManager;
+import com.uma.android.cmpi.model.Commodity;
+import com.uma.android.cmpi.util.RestUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Handler;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView stateSearchView;
+    private TextView districtSearchView;
+    private ListView commodityListView;
+    private List<Commodity> commodityList=new ArrayList<>();
+    private CommodityListViewAdapter commodityListViewAdapter;
+    Handler handler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.commodity_list);
+        stateSearchView= (TextView) findViewById(R.id.search_state);
+        districtSearchView= (TextView) findViewById(R.id.search_district);
+        commodityListView= (ListView) findViewById(R.id.list_commodity);
+        commodityListViewAdapter=new CommodityListViewAdapter(commodityList,getApplicationContext());
+        commodityListView.setAdapter(commodityListViewAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        SearchManager.instance().setSearchListener(new SearchListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onResults(final List<Commodity> results) {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        commodityListViewAdapter.addResults(results);
+                    }
+                });
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
-
-
+        searchCommodityPrices();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+
+    private void searchCommodityPrices(){
+        CMPAPIFilter filter=new CMPAPIFilter("Karnataka");
+        String url=RestUtil.getURL(filter);
+        SearchManager.instance().performSearch(url);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 
 }

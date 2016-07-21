@@ -1,8 +1,9 @@
 package com.uma.android.cmpi.util;
 
+import android.util.Log;
+
 import com.uma.android.cmpi.api.APIConstants;
 import com.uma.android.cmpi.api.CMPAPIFilter;
-import com.uma.android.cmpi.tests.TestUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class RestUtil implements APIConstants {
     private static String TAG = RestUtil.class.getCanonicalName();
 
     public static String get(URL url) {
+        Log.d(TAG,"URL is : "+url.toString());
         StringBuilder sb = new StringBuilder();
         HttpURLConnection connection = null;
         try {
@@ -51,7 +53,6 @@ public class RestUtil implements APIConstants {
         sb.append(AND);
         sb.append(API_KEY + "=");
         sb.append(API_KEY_VAL);
-        TestUtil.print(sb.toString() + "\n");
         return sb.toString();
     }
 
